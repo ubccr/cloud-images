@@ -3,8 +3,8 @@
   {
   "type": "qemu",
   "format": "raw",
-  "iso_url": "http://mirrors.kernel.org/ubuntu-releases/14.04.1/ubuntu-14.04.1-server-amd64.iso",
-  "iso_checksum": "ca2531b8cd79ea5b778ede3a524779b9",
+  "iso_url": "http://lug.mtu.edu/ubuntu-iso/trusty/ubuntu-14.04.2-server-amd64.iso",
+  "iso_checksum": "6478187442f331631b65f886cdd229ce",
   "iso_checksum_type": "md5",
   "ssh_username": "vagrant",
   "ssh_password": "password",

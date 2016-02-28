@@ -7,7 +7,7 @@ The steps provided here were tested on CentOS 6.
 
 1. Download [Packer](http://www.packer.io/): 
 
-        wget https://dl.bintray.com/mitchellh/packer/0.6.1_linux_amd64.zip -O packer.zip
+        wget https://releases.hashicorp.com/packer/0.9.0/packer_0.9.0_linux_amd64.zip -O packer.zip
 
 2. Unzip [Packer](http://www.packer.io/)
 

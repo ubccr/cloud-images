@@ -3,8 +3,8 @@
   {
   "type": "qemu",
   "format": "raw",
-  "iso_url": "http://mirror.cisp.com/CentOS/7/os/x86_64/images/boot.iso",
-  "iso_checksum": "96de4f38a2f07da51831153549c8bd0c",
+  "iso_url": "http://bay.uchicago.edu/centos/7.2.1511/os/x86_64/images/boot.iso",
+  "iso_checksum": "99D305FA40EC9E28EF8450C3BCC45F85",
   "iso_checksum_type": "md5",
   "ssh_username": "root",
   "ssh_password": "password",

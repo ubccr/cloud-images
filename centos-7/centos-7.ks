@@ -5,8 +5,8 @@ auth --useshadow --passalgo=sha512
 # Reboot after installation
 reboot
 # Use network installation
-url --url="http://mirror.cisp.com/CentOS/7/os/x86_64/"
-repo --name="CentOS-Base" --baseurl=http://mirror.cisp.com/CentOS/7/os/x86_64/
+url --url="http://mirrors.cbls.ccr.buffalo.edu/centos/7/os/x86_64/"
+repo --name="CentOS-Base" --baseurl=http://mirrors.cbls.ccr.buffalo.edu/centos/7/os/x86_64/
 # Do not configure the X Window System
 skipx
 # Firewall configuration
@@ -76,6 +76,8 @@ policycoreutils
 rootfiles
 sudo
 system-config-firewall-base
+vim
+git
 -acl
 -aic94xx-firmware
 -atmel-firmware

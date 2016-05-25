@@ -7,6 +7,7 @@ reboot
 # Use network installation
 url --url="http://mirrors.cbls.ccr.buffalo.edu/centos/7/os/x86_64/"
 repo --name="CentOS-Base" --baseurl=http://mirrors.cbls.ccr.buffalo.edu/centos/7/os/x86_64/
+repo --name="CCR" --baseurl=http://mirrors.cbls.ccr.buffalo.edu/ccr/centos/7/x86_64/
 # Do not configure the X Window System
 skipx
 # Firewall configuration
@@ -78,6 +79,13 @@ sudo
 system-config-firewall-base
 vim
 git
+pcp
+pcp-conf
+pcp-libs
+pcp-libs-devel
+pcp-system-tools
+perl-PCP-PMDA
+python-pcp
 -acl
 -aic94xx-firmware
 -atmel-firmware

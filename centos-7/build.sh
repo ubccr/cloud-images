@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Inputs:
+#  user
+#  region
+#  zone
+#  prefix (default is centos7ccrbase)
+
 # Not a real script yet, just keep track of the commands
 
 # Build the qemu image

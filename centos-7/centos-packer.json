@@ -13,7 +13,7 @@
   "http_port_min" : 9001,
   "http_port_max" : 9001,
   "shutdown_command": "shutdown -P now",
-  "vm_name": "centos-7-base",
+  "vm_name": "CHANGE_NAME",
   "disk_interface": "virtio",
   "ssh_wait_timeout": "3000000s",
   "qemu_binary": "/usr/libexec/qemu-kvm",
@@ -26,8 +26,14 @@
   }
   ],
   "provisioners": [
-  {
-    "type": "shell",
-    "script": "post_install.sh"
-  }]
+    {
+      "type": "file",
+      "source": "deploy",
+      "destination": "/tmp"
+    },
+    {
+      "type": "shell",
+      "script": "post_install.sh"
+    }
+  ]
 }

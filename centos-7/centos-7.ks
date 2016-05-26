@@ -86,6 +86,9 @@ pcp-libs-devel
 pcp-system-tools
 perl-PCP-PMDA
 python-pcp
+traceroute
+bind-utils
+telnet
 -acl
 -aic94xx-firmware
 -atmel-firmware

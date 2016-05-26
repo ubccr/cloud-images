@@ -4,32 +4,75 @@
 #  user
 #  region
 #  zone
-#  prefix (default is centos7ccrbase)
 
-# Not a real script yet, just keep track of the commands
+function badexit
+{
+    echo "$1" 1>&2
+    exit 1
+}
+
+builddate=`date +%Y%m%d`
+imagename=CCR-centos7-$builddate
+ebsimagename=CCR-centos7-ebs-$builddate
+fulllog=$imagename.log
+
+touch $fulllog
 
 # Build the qemu image
 # May take a long time, 5-10 minutes
 # Can connect to the build with: vncviewer -Shared localhost:<port>
-packer build centos-packer.json
+
+echo "Building packer image: $imagename" | tee -a $fulllog
+
+sed -e "s/CHANGE_NAME/$imagename/" centos-packer.json > centos-packer-$builddate.json
+packer build centos-packer-$builddate.json >> $fulllog || badexit "Can't build: $imagename"
 
 # Convert for Euca
-virt-sysprep -a output-qemu/centos-7-base 
+echo "Running virt-sysprep" | tee -a $fulllog
+virt-sysprep -a output-qemu/$imagename >> $fulllog || badexit "Can't virt-sysprep $imagename"
 
 # Install Instance store Image
-euca-install-image --region minnus2@ccr-cbls-2 -i output-qemu/centos-7-base --virtualization-type hvm -b centos -r x86_64 --name PackerTest_3_Centos7
+echo "euca-install-image for: $imagename" | tee -a $fulllog
+euca-install-image -i output-qemu/$imagename --virtualization-type hvm -b $imagename -r x86_64 --name $imagename >> $fulllog || badexit "euca-install-image failed"
+
+emi=`grep ^IMAGE $fulllog |cut -f 2`
 
 # Make public
-euca-modify-image-attribute --region minnus2@ccr-cbls-2 -l -a all emi-4f006ddf
+echo "Making $emi public" | tee -a $fulllog
+euca-modify-image-attribute -l -a all $emi >> $fulllog || badexit "Can't make $emi public"
 
 # Submit a task to create an EBS volume
-euca-import-volume output-qemu/centos-7-base  --region minnus2@ccr-cbls-2 --format raw  --bucket ebscentos7bucket --prefix centos7_packer_ebs -z ccr-cbls-2a
+echo "Making EBS task for $ebsimagename" | tee -a $fulllog
+euca-import-volume output-qemu/$imagename --format raw  --bucket $ebsimagename --prefix $ebsimagename -z ccr-cbls-2a >> $fulllog || badexit "Can't start EBS task"
+
+importvol=`grep IMPORTVOLUME $fulllog | cut -f 4`
+
+while true ; do
+	echo "Waiting for EBS task to finish..." | tee -a $fulllog
+	euca-describe-conversion-tasks $importvol |grep completed && break
+	sleep 10
+done
+
+volid=`euca-describe-conversion-tasks import-vol-cfad4cdb |grep VolumeId |cut -f 7`
 
 # Create the snapshot from the volume
-euca-create-snapshot --region minnus2@ccr-cbls-2 vol-38a3162e
+echo "Make snapshot for $volid" | tee -a $fulllog
+euca-create-snapshot $volid >> $fulllog || badexit "Can't make snapshot for $volid"
+
+importsnap=`grep SNAPSHOT $fulllog |cut -f 2`
+
+while true ; do
+	echo "Waiting for Snapshot $importsnap task to finish..." | tee -a $fulllog
+	euca-describe-snapshots $importsnap | grep completed && break
+	sleep 10
+done
+
 
 # Register the EBS image
-euca-register --region minnus2@ccr-cbls-2  --name packer-centos7-ebs --snapshot snap-c584bda2 -a x86_64
+euca-register --name $ebsimagename --snapshot $importsnap -a x86_64 >> $fulllog || badexit "Can't register EBS: $ebsimagename from $importsnap"
+
+ebsemi=`grep ^IMAGE $fulllog | tail -1 | cut -f 2`
 
 # Make public
-euca-modify-image-attribute --region minnus2@ccr-cbls-2 -l -a all emi-6018d46b
+echo "Making EBS $ebsemi public" | tee -a $fulllog
+euca-modify-image-attribute -l -a all $ebsemi >> $fulllog || badexit "Can't make EBS image public"

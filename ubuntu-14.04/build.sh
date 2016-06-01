@@ -11,11 +11,13 @@ function badexit
     exit 1
 }
 
-rev=0
+os=ubuntu1404
+
+rev=1
 
 builddate=`date +%Y%m%d`
-imagename=ccr-centos7-$builddate-$rev
-ebsimagename=ccr-centos7-ebs-$builddate-$rev
+imagename=ccr-$os-$builddate-$rev
+ebsimagename=ccr-$os-ebs-$builddate-$rev
 fulllog=$imagename.log
 
 touch $fulllog
@@ -26,8 +28,8 @@ touch $fulllog
 
 echo "Building packer image: $imagename" | tee -a $fulllog
 
-sed -e "s/CHANGE_NAME/$imagename/" centos-packer.json > centos-packer-$builddate.json
-packer build centos-packer-$builddate.json >> $fulllog || badexit "Can't build: $imagename"
+sed -e "s/CHANGE_NAME/$imagename/" packer.json > packer-$builddate.json
+packer build packer-$builddate.json >> $fulllog || badexit "Can't build: $imagename"
 
 # Convert for Euca
 echo "Running virt-sysprep" | tee -a $fulllog

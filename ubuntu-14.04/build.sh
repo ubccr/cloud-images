@@ -57,7 +57,7 @@ while true ; do
 	sleep 10
 done
 
-volid=`euca-describe-conversion-tasks import-vol-cfad4cdb |grep VolumeId |cut -f 7`
+volid=`euca-describe-conversion-tasks $importvol |grep VolumeId |cut -f 7`
 
 # Create the snapshot from the volume
 echo "Make snapshot for $volid" | tee -a $fulllog

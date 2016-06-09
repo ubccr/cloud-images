@@ -1,0 +1,6 @@
+[ccr-centos7]
+name=ccr-centos7
+baseurl=http://mirrors.ccr.buffalo.edu/ccr/centos/$releasever/$basearch/
+gpgcheck=0
+enabled=1
+priority=99

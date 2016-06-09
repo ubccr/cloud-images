@@ -34,7 +34,8 @@ services --enabled="network,ntpd,ntpdate"
 timezone UTC
 # System bootloader configuration
 bootloader --append="serial=tty0 console=ttyS0,115200n8" --location=mbr --timeout=1 --boot-drive=vda
-autopart --type=plain
+#Setup Partitions
+part / --size=1 --grow --asprimary --ondrive=vda
 # Clear the Master Boot Record
 zerombr
 # Partition clearing information

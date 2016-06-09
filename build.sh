@@ -11,11 +11,18 @@ function badexit
     exit 1
 }
 
-rev=0
+rev=$1
+
+if [ -z $rev ]; then
+	echo "Rev required"
+	exit 1
+fi
+
+os=${PWD##*/}
 
 builddate=`date +%Y%m%d`
-imagename=ccr-centos7-$builddate-$rev
-ebsimagename=ccr-centos7-ebs-$builddate-$rev
+imagename=ccr-$os-$builddate-$rev
+ebsimagename=ccr-$os-ebs-$builddate-$rev
 fulllog=$imagename.log
 
 touch $fulllog
@@ -26,8 +33,8 @@ touch $fulllog
 
 echo "Building packer image: $imagename" | tee -a $fulllog
 
-sed -e "s/CHANGE_NAME/$imagename/" centos-packer.json > centos-packer-$builddate.json
-packer build centos-packer-$builddate.json >> $fulllog || badexit "Can't build: $imagename"
+sed -e "s/CHANGE_NAME/$imagename/" packer.json > packer-$builddate.json
+packer build packer-$builddate.json >> $fulllog || badexit "Can't build: $imagename"
 
 # Convert for Euca
 echo "Running virt-sysprep" | tee -a $fulllog
@@ -55,7 +62,7 @@ while true ; do
 	sleep 10
 done
 
-volid=`euca-describe-conversion-tasks import-vol-cfad4cdb |grep VolumeId |cut -f 7`
+volid=`euca-describe-conversion-tasks $importvol |grep VolumeId |cut -f 7`
 
 # Create the snapshot from the volume
 echo "Make snapshot for $volid" | tee -a $fulllog

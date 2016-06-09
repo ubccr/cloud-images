@@ -20,3 +20,6 @@ euca-delete-snapshot $snap
 
 echo "Removing $vol"
 euca-delete-volume $vol
+
+echo "Deleting Bucket: $image"
+./deletes3s.sh $image

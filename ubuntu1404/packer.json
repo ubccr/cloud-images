@@ -15,6 +15,7 @@
   "http_port_max" : 9001,
   "shutdown_command": "shutdown -P now",
   "vm_name": "CHANGE_NAME",
+  "output_directory": "CHANGE_NAME",
   "disk_interface": "virtio",
   "qemu_binary": "/usr/libexec/qemu-kvm",
   "headless": true,

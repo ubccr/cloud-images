@@ -1,0 +1,56 @@
+{
+  "builders": [{
+    "type": "qemu",
+    "format": "raw",
+    "iso_url": "http://mirrors.rit.edu/ubuntu-releases/16.04/ubuntu-16.04-server-amd64.iso",
+    "iso_checksum": "b8b172cbdf04f5ff8adc8c2c1b4007ccf66f00fc6a324a6da6eba67de71746f6",
+    "iso_checksum_type": "sha256",
+    "output_directory": "CHANGE_NAME",
+    "vm_name": "CHANGE_NAME",
+    "disk_size": "10000",
+    "headless": "true",
+    "http_directory" : ".",
+    "http_port_min" : 9001,
+    "http_port_max" : 9001,
+    "boot_wait": "5s",
+    "boot_command": [
+      "<enter><wait>",
+      "<f6><esc>",
+      "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+      "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+      "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+      "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+      "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+      "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+      "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+      "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+      "<bs><bs><bs>",
+      "/install/vmlinuz ",
+      "initrd=/install/initrd.gz ",
+      "auto-install/enable=true ",
+      "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
+      "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA ",
+      "keyboard-configuration/variant=USA console-setup/ask_detect=false ",
+      "debconf/priority=critical ",
+      "preseed/url=http://{{.HTTPIP}}:{{.HTTPPort}}/preseed.cfg ",
+      "<enter>"
+    ],
+    "ssh_wait_timeout": "60m",
+    "ssh_username": "root",
+    "ssh_password": "password",
+    "shutdown_command": "sudo systemctl poweroff",
+    "disk_interface": "virtio",
+    "qemu_binary": "/usr/libexec/qemu-kvm",
+    "disk_interface": "virtio",
+    "headless": true,
+    "accelerator": "kvm",
+    "qemuargs": [["-machine", "type=pc,accel=kvm"],
+                 ["-device", "virtio-net-pci,netdev=user.0"]]
+  }
+],
+  "provisioners": [
+  {
+    "type": "shell",
+    "script": "post_install.sh"
+  }]
+}

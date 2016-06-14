@@ -33,16 +33,16 @@ touch $fulllog
 
 echo "Building packer image: $imagename" | tee -a $fulllog
 
-sed -e "s/CHANGE_NAME/$imagename/" packer.json > packer-$builddate.json
+sed -e "s/CHANGE_NAME/$imagename/g" packer.json > packer-$builddate.json
 packer build packer-$builddate.json >> $fulllog || badexit "Can't build: $imagename"
 
 # Convert for Euca
 echo "Running virt-sysprep" | tee -a $fulllog
-virt-sysprep -a output-qemu/$imagename >> $fulllog || badexit "Can't virt-sysprep $imagename"
+virt-sysprep -a $imagename/$imagename >> $fulllog || badexit "Can't virt-sysprep $imagename"
 
 # Install Instance store Image
 echo "euca-install-image for: $imagename" | tee -a $fulllog
-euca-install-image -i output-qemu/$imagename --virtualization-type hvm -b $imagename -r x86_64 --name $imagename >> $fulllog || badexit "euca-install-image failed"
+euca-install-image -i $imagename/$imagename --virtualization-type hvm -b $imagename -r x86_64 --name $imagename >> $fulllog || badexit "euca-install-image failed"
 
 emi=`grep ^IMAGE $fulllog |cut -f 2`
 
@@ -52,7 +52,7 @@ euca-modify-image-attribute -l -a all $emi >> $fulllog || badexit "Can't make $e
 
 # Submit a task to create an EBS volume
 echo "Making EBS task for $ebsimagename" | tee -a $fulllog
-euca-import-volume output-qemu/$imagename --format raw  --bucket $ebsimagename --prefix $ebsimagename -z ccr-cbls-2a >> $fulllog || badexit "Can't start EBS task"
+euca-import-volume $imagename/$imagename --format raw  --bucket $ebsimagename --prefix $ebsimagename -z ccr-cbls-2a >> $fulllog || badexit "Can't start EBS task"
 
 importvol=`grep IMPORTVOLUME $fulllog | cut -f 4`
 

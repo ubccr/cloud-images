@@ -90,6 +90,7 @@ python-pcp
 traceroute
 bind-utils
 telnet
+wget
 -acl
 -aic94xx-firmware
 -atmel-firmware

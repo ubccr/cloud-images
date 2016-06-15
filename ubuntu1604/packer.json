@@ -49,6 +49,11 @@
   }
 ],
   "provisioners": [
+    {
+      "type": "file",
+      "source": "deploy",
+      "destination": "/tmp"
+    },
   {
     "type": "shell",
     "script": "post_install.sh"

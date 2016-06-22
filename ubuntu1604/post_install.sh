@@ -23,6 +23,7 @@ cd /tmp/deploy
 systemctl enable pmcd
 systemctl disable pmie
 systemctl disable pmlogger
+systemctl disable pmproxy
 
 # Turn on proc reporting
 sed -i -e '/iam=proc/a args=-A' /var/lib/pcp/pmdas/proc/Install

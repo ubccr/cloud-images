@@ -17,3 +17,6 @@ euca-delete-bundle -b $image -p $image
 
 # This second one may fail, but is sometimes necessary
 euca-deregister $emi
+
+# Remove the empty bucket
+./s3curl.pl --delete --id euca -- "http://199.109.195.247:8773/services/objectstorage/$image"

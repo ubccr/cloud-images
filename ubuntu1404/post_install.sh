@@ -20,9 +20,9 @@ cd /tmp/deploy
 /bin/bash ./secure-pcp.sh
 
 # Start pmcd only on boot, upstart is a pain
-update-rc.d pmie
-update-rc.d pmlogger
-update-rc.d pmproxy
+update-rc.d pmie disable
+update-rc.d pmlogger disable
+update-rc.d pmproxy disable
 
 # Turn on proc reporting
 sed -i -e '/iam=proc/a args=-A' /var/lib/pcp/pmdas/proc/Install

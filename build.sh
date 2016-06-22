@@ -36,8 +36,6 @@ echo "Building packer image: $imagename" | tee -a $fulllog
 sed -e "s/CHANGE_NAME/$imagename/g" packer.json > packer-$builddate.json
 packer build packer-$builddate.json >> $fulllog || badexit "Can't build: $imagename"
 
-exit
-
 # Convert for Euca
 echo "Running virt-sysprep" | tee -a $fulllog
 virt-sysprep -a $imagename/$imagename >> $fulllog || badexit "Can't virt-sysprep $imagename"

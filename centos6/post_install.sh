@@ -27,7 +27,9 @@ cd /tmp/deploy
 /bin/bash ./secure-pcp.sh 
 
 # Start pcp on boot
-#systemctl enable pmcd
+chkconfig pmproxy off
+chkconfig pmie off
+chkconfig pmlogger off
 
 # Turn on proc reporting
 sed -i -e '/iam=proc/a args=-A' /var/lib/pcp/pmdas/proc/Install

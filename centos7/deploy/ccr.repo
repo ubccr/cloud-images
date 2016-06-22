@@ -1,6 +1,6 @@
 [ccr-centos7]
 name=ccr-centos7
-baseurl=http://mirrors.ccr.buffalo.edu/ccr/centos/$releasever/$basearch/
+baseurl=http://mirrors.ccr.buffalo.edu/full-mirror/ccr/centos/$releasever/
 gpgcheck=1
 gpgkey=http://mirrors.ccr.buffalo.edu/full-mirror/ccr/RPM-GPG-KEY-ccrpkg
 enabled=1

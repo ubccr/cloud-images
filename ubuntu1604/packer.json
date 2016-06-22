@@ -2,9 +2,9 @@
   "builders": [{
     "type": "qemu",
     "format": "raw",
-    "iso_url": "http://mirrors.rit.edu/ubuntu-releases/16.04/ubuntu-16.04-server-amd64.iso",
-    "iso_checksum": "b8b172cbdf04f5ff8adc8c2c1b4007ccf66f00fc6a324a6da6eba67de71746f6",
-    "iso_checksum_type": "sha256",
+    "iso_url": "http://mirrors.cbls.ccr.buffalo.edu/full-mirror/isos/ubuntu-16.04-server-amd64.iso",
+    "iso_checksum": "23e97cd5d4145d4105fbf29878534049",
+    "iso_checksum_type": "md5",
     "output_directory": "CHANGE_NAME",
     "vm_name": "CHANGE_NAME",
     "disk_size": "10000",

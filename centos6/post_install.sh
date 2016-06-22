@@ -1,11 +1,36 @@
 #!/bin/bash
-yum update -y
-yum install -y http://mirror.pnl.gov/epel/6/i386/epel-release-6-8.noarch.rpm
-yum install -y cloud-init
-passwd -l root
 
-### Configure cloud-init for root
-sed -i 's/disable_root:.*/disable_root: 0/g' /etc/cloud/cloud.cfg
-sed -i 's/cloud-user/root/g' /etc/cloud/cloud.cfg
+# Add our repos
+/bin/cp -f /tmp/deploy/CentOS-Base.repo /etc/yum.repos.d/
+/bin/cp -f /tmp/deploy/ccr.repo /etc/yum.repos.d/
+
+# Disable fastest mirror plugin since we only list our repo
+sed -i -e 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/fastestmirror.conf
+
+yum clean all
+yum repolist
+
+yum install -y epel-release
+
+/bin/cp -f /tmp/deploy/epel.repo /etc/yum.repos.d/
+
+yum clean all
+yum repolist
+
+# Need cloud-utils-growpart otherwise ebs resize just fails silently
+yum install -y cloud-init cloud-utils-growpart
+
+yum -y update
+
+# Setup secure pcp
+cd /tmp/deploy
+/bin/bash ./secure-pcp.sh 
+
+# Start pcp on boot
+#systemctl enable pmcd
+
+# Turn on proc reporting
+sed -i -e '/iam=proc/a args=-A' /var/lib/pcp/pmdas/proc/Install
+touch /var/lib/pcp/pmdas/proc/.NeedInstall
 
 cat /etc/cloud/cloud.cfg

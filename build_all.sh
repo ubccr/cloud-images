@@ -7,10 +7,13 @@ if [ -z $rev ]; then
 	exit 1;
 fi
 
-for os in centos7 ubuntu1404
+for os in centos6 centos7 ubuntu1404 ubuntu1604 debian8
 do
 	echo "Building $os"
 	cd $os
-	../build.sh $rev | tee $os.build.out
+	echo "../build.sh $rev &> $os.build.out &"
+	../build.sh $rev &> $os.build.out &
 	cd ..
 done
+
+wait

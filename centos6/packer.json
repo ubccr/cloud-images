@@ -3,19 +3,20 @@
   {
   "type": "qemu",
   "format": "raw",
-  "iso_url": "http://bay.uchicago.edu/centos/6.7/isos/x86_64/CentOS-6.7-x86_64-minimal.iso",
-  "iso_checksum": "9381a24b8bee2fed0c26896141a64b69",
+  "iso_url": "http://mirrors.cbls.ccr.buffalo.edu/full-mirror/centos/6.8/isos/x86_64/CentOS-6.8-x86_64-minimal.iso",
+  "iso_checksum": "0ca12fe5f28c2ceed4f4084b41ff8a0b",
   "iso_checksum_type": "md5",
   "ssh_username": "root",
   "ssh_password": "password",
-  "disk_size": "5000",
+  "disk_size": "10000",
   "http_directory" : ".",
   "http_port_min" : 9001,
   "http_port_max" : 9001,
   "shutdown_command": "shutdown -P now",
-  "vm_name": "centos-6-base",
+  "vm_name": "CHANGE_NAME",
+  "output_directory": "CHANGE_NAME",
   "disk_interface": "virtio",
-  "qemu_binary": "../utils/fake-qemu",
+  "qemu_binary": "/usr/libexec/qemu-kvm",
   "headless": true,
   "accelerator": "kvm",
   "qemuargs": [[ "-m", "1024m" ],
@@ -25,6 +26,11 @@
   }
   ],
   "provisioners": [
+    {
+      "type": "file",
+      "source": "deploy",
+      "destination": "/tmp"
+    },
   {
     "type": "shell",
     "script": "post_install.sh"

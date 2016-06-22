@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Add the public ip for the mirror since thats what is accessable
-echo "128.205.41.74 mirrors.ccr.buffalo.edu" >> /etc/hosts
+#echo "128.205.41.74 mirrors.ccr.buffalo.edu" >> /etc/hosts
 
 # Add our repos
 /bin/cp -f /tmp/deploy/CentOS-Base.repo /etc/yum.repos.d/
@@ -26,7 +26,7 @@ yum install -y cloud-init cloud-utils-growpart
 yum -y update
 
 #Allow sudo over ssh
-sed -i -e 's/Defaults    requiretty//' -e 's/Defaults   !visiblepw//' /etc/sudoers
+#sed -i -e 's/Defaults    requiretty//' -e 's/Defaults   !visiblepw//' /etc/sudoers
 
 # Setup secure pcp
 cd /tmp/deploy

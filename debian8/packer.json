@@ -3,19 +3,21 @@
   {
   "type": "qemu",
   "format": "raw",
-  "iso_url": "http://cdimage.debian.org/debian-cd/7.5.0/amd64/iso-cd/debian-7.5.0-amd64-netinst.iso",
-  "iso_checksum": "8fdb6715228ea90faba58cb84644d296",
+  "iso_url": "http://mirrors.cbls.ccr.buffalo.edu/full-mirror/isos/debian-8.5.0-amd64-netinst.iso",
+  "iso_checksum": "3e1b9029a0cf188730646c379d15073f",
   "iso_checksum_type": "md5",
   "ssh_username": "root",
   "ssh_password": "password",
-  "disk_size": "5000",
+  "ssh_wait_timeout": "3000000s",
+  "disk_size": "10000",
   "http_directory" : ".",
   "http_port_min" : 9001,
   "http_port_max" : 9001,
   "shutdown_command": "shutdown -h now",
-  "vm_name": "debian-7-base",
+  "vm_name": "CHANGE_NAME",
+  "output_directory": "CHANGE_NAME",
   "disk_interface": "virtio",
-  "qemu_binary": "../utils/fake-qemu",
+  "qemu_binary": "/usr/libexec/qemu-kvm",
   "headless": true,
   "accelerator": "kvm",
   "qemuargs": [["-machine", "type=pc,accel=kvm"],
@@ -39,6 +41,11 @@
   }
   ],
   "provisioners": [
+{
+      "type": "file",
+      "source": "deploy",
+      "destination": "/tmp"
+    },
   {
     "type": "shell",
     "script": "post_install.sh"

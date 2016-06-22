@@ -11,12 +11,16 @@ firewall --disabled
 bootloader --timeout=1  --append="serial=tty0 console=ttyS0,115200n8"
 network --bootproto=dhcp --device=eth0 --onboot=on
 services --enabled=network,ntpd,ntpdate,acpid
-autopart
+
+part / --size=1 --grow --asprimary --ondrive=vda
+
 zerombr
 rootpw password
 reboot
 
-repo --name=Centos-Base --mirrorlist=http://mirrorlist.centos.org/?release=6&arch=x86_64&repo=os
+url --url="http://mirrors.cbls.ccr.buffalo.edu/centos/6/os/x86_64/"
+repo --name="CentOS-Base" --baseurl=http://mirrors.cbls.ccr.buffalo.edu/centos/6/os/x86_64/
+repo --name="CCR" --baseurl=http://mirrors.cbls.ccr.buffalo.edu/ccr/centos/6/x86_64/
 
 %packages --nobase --excludedocs --instLangs=en
 @core
@@ -37,6 +41,19 @@ system-config-firewall-base
 ntp
 ntpdate
 acpid
+vim
+git
+pcp
+pcp-conf
+pcp-libs
+pcp-libs-devel
+pcp-system-tools
+perl-PCP-PMDA
+python-pcp
+traceroute
+bind-utils
+telnet
+wget
 
 # Package exclusions
 -plymouth

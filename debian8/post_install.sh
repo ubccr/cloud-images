@@ -6,7 +6,7 @@ echo "deb http://mirrors.ccr.buffalo.edu/full-mirror/ccr/debian/8 /" >> /etc/apt
 
 apt-get update
 
-apt-get -y install cloud-init traceroute libnss3-tools apt-file pcp libpcp3-dev sudo
+apt-get -y install cloud-init cloud-initramfs-growroot traceroute libnss3-tools apt-file pcp libpcp3-dev sudo
 
 apt-get -y upgrade
 
@@ -17,6 +17,9 @@ echo "apt_preserve_sources_list: true" >> /etc/cloud/cloud.cfg
 
 # Debian uses /bin/sh by default
 sed -i -e 's@SHELL=/bin/sh@SHELL=/bin/bash@' /etc/default/useradd
+
+# Debian cloudinit doesn't turn on sudo
+sed -i -e '/default_user:/a \ \ \ \ \ sudo: ["ALL=(ALL) NOPASSWD:ALL"]' /etc/cloud/cloud.cfg
 
 # Setup secure pcp
 cd /tmp/deploy

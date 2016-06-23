@@ -7,7 +7,7 @@ reboot
 # Use network installation
 url --url="http://mirrors.cbls.ccr.buffalo.edu/full-mirror/centos/7/os/x86_64/"
 repo --name="CentOS-Base" --baseurl=http://mirrors.cbls.ccr.buffalo.edu/full-mirror/centos/7/os/x86_64/
-repo --name="CCR" --baseurl=http://mirrors.cbls.ccr.buffalo.edu/full-mirror/ccr/centos/7/
+repo --name="CCR" --baseurl=http://mirrors.cbls.ccr.buffalo.edu/full-mirror/ccr/centos/7/x86_64/
 # Do not configure the X Window System
 skipx
 # Firewall configuration

@@ -21,9 +21,11 @@ fi
 os=${PWD##*/}
 
 builddate=`date +%Y%m%d`
-imagename=ccr-$os-$builddate-$rev
-ebsimagename=ccr-$os-ebs-$builddate-$rev
+imagename=$os-ccr-$builddate-$rev
+ebsimagename=$os-ebs-ccr-$builddate-$rev
 fulllog=$imagename.log
+
+zone=ccr-cbls-2a
 
 touch $fulllog
 
@@ -52,7 +54,7 @@ euca-modify-image-attribute -l -a all $emi >> $fulllog || badexit "Can't make $e
 
 # Submit a task to create an EBS volume
 echo "Making EBS task for $ebsimagename" | tee -a $fulllog
-euca-import-volume $imagename/$imagename --format raw  --bucket $ebsimagename --prefix $ebsimagename -z ccr-cbls-2a >> $fulllog || badexit "Can't start EBS task"
+euca-import-volume $imagename/$imagename --format raw  --bucket $ebsimagename --prefix $ebsimagename -z $zone >> $fulllog || badexit "Can't start EBS task"
 
 importvol=`grep IMPORTVOLUME $fulllog | cut -f 4`
 

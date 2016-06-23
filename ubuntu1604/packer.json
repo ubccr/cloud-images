@@ -2,7 +2,7 @@
   "builders": [{
     "type": "qemu",
     "format": "raw",
-    "iso_url": "http://mirrors.cbls.ccr.buffalo.edu/full-mirror/isos/ubuntu-16.04-server-amd64.iso",
+    "iso_url": "http://mirrors.cbls.ccr.buffalo.edu/isos/ubuntu-16.04-server-amd64.iso",
     "iso_checksum": "23e97cd5d4145d4105fbf29878534049",
     "iso_checksum_type": "md5",
     "output_directory": "CHANGE_NAME",

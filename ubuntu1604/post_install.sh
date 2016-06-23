@@ -9,7 +9,7 @@ apt-get -y upgrade
 apt-file update
 
 # Add our local repo
-echo "deb http://mirrors.ccr.buffalo.edu/full-mirror/ccr/ubuntu/1604 ./" >> /etc/apt/sources.list
+echo "deb http://mirrors.ccr.buffalo.edu/ccr/ubuntu/1604 ./" >> /etc/apt/sources.list
 
 apt-get update
 

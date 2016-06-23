@@ -1,8 +1,8 @@
 #!/bin/bash
 
-wget -O - http://mirrors.ccr.buffalo.edu/full-mirror/ccr/RPM-GPG-KEY-ccrpkg | apt-key add -
+wget -O - http://mirrors.ccr.buffalo.edu/ccr/RPM-GPG-KEY-ccrpkg | apt-key add -
 
-echo "deb http://mirrors.ccr.buffalo.edu/full-mirror/ccr/debian/8 /" >> /etc/apt/sources.list
+echo "deb http://mirrors.ccr.buffalo.edu/ccr/debian/8 /" >> /etc/apt/sources.list
 
 apt-get update
 

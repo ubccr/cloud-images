@@ -3,7 +3,7 @@
   {
   "type": "qemu",
   "format": "raw",
-  "iso_url": "http://mirrors.cbls.ccr.buffalo.edu/full-mirror/isos/debian-8.5.0-amd64-netinst.iso",
+  "iso_url": "http://mirrors.cbls.ccr.buffalo.edu/isos/debian-8.5.0-amd64-netinst.iso",
   "iso_checksum": "3e1b9029a0cf188730646c379d15073f",
   "iso_checksum_type": "md5",
   "ssh_username": "root",

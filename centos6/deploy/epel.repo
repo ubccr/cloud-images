@@ -1,6 +1,6 @@
 [epel]
 name=Extra Packages for Enterprise Linux 6 - $basearch
-baseurl=http://mirrors.ccr.buffalo.edu/full-mirror/epel/6/$basearch
+baseurl=http://mirrors.ccr.buffalo.edu/epel/6/$basearch
 failovermethod=priority
 enabled=1
 gpgcheck=1

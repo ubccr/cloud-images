@@ -44,7 +44,7 @@ virt-sysprep -a $imagename/$imagename >> $fulllog || badexit "Can't virt-sysprep
 
 # Install Instance store Image
 echo "euca-install-image for: $imagename" | tee -a $fulllog
-euca-install-image -i $imagename/$imagename --virtualization-type hvm -b $imagename -r x86_64 --name $imagename >> $fulllog || badexit "euca-install-image failed"
+euca-install-image -i $imagename/$imagename --description $os --virtualization-type hvm -b $imagename -r x86_64 --name $imagename >> $fulllog || badexit "euca-install-image failed"
 
 emi=`grep ^IMAGE $fulllog |cut -f 2`
 
@@ -80,10 +80,19 @@ done
 
 
 # Register the EBS image
-euca-register --name $ebsimagename --snapshot $importsnap -a x86_64 >> $fulllog || badexit "Can't register EBS: $ebsimagename from $importsnap"
+euca-register --name $ebsimagename --description "$os-ebs" --snapshot $importsnap -a x86_64 >> $fulllog || badexit "Can't register EBS: $ebsimagename from $importsnap"
 
 ebsemi=`grep ^IMAGE $fulllog | tail -1 | cut -f 2`
 
 # Make public
 echo "Making EBS $ebsemi public" | tee -a $fulllog
 euca-modify-image-attribute -l -a all $ebsemi >> $fulllog || badexit "Can't make EBS image public"
+
+# Make a backup
+echo "Copying to /srv/cosmos/euca/images"
+cp -r $imagename /srv/cosmos/euca/images/$os
+touch /srv/cosmos/euca/images/$os/$imagename/info.txt
+echo "emi=$emi" >> /srv/cosmos/euca/images/$os/$imagename/info.txt
+echo "ebsemi=$ebsemi" >> /srv/cosmos/euca/images/$os/$imagename/info.txt
+echo "vol=$volid" >> /srv/cosmos/euca/images/$os/$imagename/info.txt
+echo "snap=$importsnap" >> /srv/cosmos/euca/images/$os/$imagename/info.txt

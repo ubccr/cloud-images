@@ -1,6 +1,7 @@
 {
   "builders": [
   {
+  "name": "debian8",
   "type": "qemu",
   "format": "raw",
   "iso_url": "http://mirrors.cbls.ccr.buffalo.edu/isos/debian-8.5.0-amd64-netinst.iso",

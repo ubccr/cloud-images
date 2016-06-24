@@ -1,6 +1,7 @@
 {
   "builders": [
   {
+  "name": "centos6",
   "type": "qemu",
   "format": "raw",
   "iso_url": "http://mirrors.cbls.ccr.buffalo.edu/centos/6.8/isos/x86_64/CentOS-6.8-x86_64-minimal.iso",

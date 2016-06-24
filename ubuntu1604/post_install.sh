@@ -13,7 +13,9 @@ echo "deb http://mirrors.ccr.buffalo.edu/ccr/ubuntu/1604 ./" >> /etc/apt/sources
 
 apt-get update
 
-apt-get -y --allow-unauthenticated install pcp libpcp3-dev
+apt-get -y install pcp libpcp3-dev
+
+echo "apt_preserve_sources_list: true" >> /etc/cloud/cloud.cfg
 
 # Setup secure pcp
 cd /tmp/deploy

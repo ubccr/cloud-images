@@ -1,5 +1,7 @@
 #!/bin/bash
 
+/bin/rm -f *-test.out
+
 for os in centos6 centos7 ubuntu1404 ubuntu1604 debian8
 do
 	echo "Cleaning $os"
@@ -12,5 +14,3 @@ do
 	/bin/rm -rf CHANGE_NAME
 	cd ..
 done
-
-wait

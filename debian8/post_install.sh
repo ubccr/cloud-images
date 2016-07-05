@@ -43,4 +43,7 @@ systemctl disable pmlogger
 sed -i -e '/iam=proc/a args=-A' /var/lib/pcp/pmdas/proc/Install
 touch /var/lib/pcp/pmdas/proc/.NeedInstall
 
+# Configure hotproc
+cp /tmp/deploy/hotproc.conf /var/lib/pcp/pmdas/proc/
+
 cat /etc/cloud/cloud.cfg

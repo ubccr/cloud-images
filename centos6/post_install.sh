@@ -18,7 +18,7 @@ yum clean all
 yum repolist
 
 # Need cloud-utils-growpart otherwise ebs resize just fails silently
-yum install -y cloud-init cloud-utils-growpart dracut-modules-growroot
+yum install -y cloud-init cloud-utils-growpart dracut-modules-growroot haveged
 
 # growpart doesn't work in centos6 so use growroot and rebuild initrd
 dracut -f
@@ -29,6 +29,8 @@ yum -y update
 cd /tmp/deploy
 /bin/bash ./secure-pcp.sh 
 
+chkconfig haveged on
+
 # Start pcp on boot
 chkconfig pmproxy off
 chkconfig pmie off
@@ -37,5 +39,8 @@ chkconfig pmlogger off
 # Turn on proc reporting
 sed -i -e '/iam=proc/a args=-A' /var/lib/pcp/pmdas/proc/Install
 touch /var/lib/pcp/pmdas/proc/.NeedInstall
+
+# Configure hotproc
+cp /tmp/deploy/hotproc.conf /var/lib/pcp/pmdas/proc/
 
 cat /etc/cloud/cloud.cfg

@@ -14,7 +14,7 @@ if [ $dash -ne 1 ]; then
 	exit
 fi
 
-images=`euca-describe-images |grep $build |cut -f 3 | cut -d/ -f2 |cut -d. -f1`
+images=`euca-describe-images |grep -v -i windows | grep $build |cut -f 3 | cut -d/ -f2 |cut -d. -f1`
 
 
 for image in $images

@@ -6,7 +6,7 @@ echo "deb http://mirrors.ccr.buffalo.edu/ccr/ubuntu/1404 /" >> /etc/apt/sources.
 
 apt-get update
 
-apt-get -y install cloud-init traceroute libnss3-tools apt-file pcp libpcp3-dev
+apt-get -y install cloud-init traceroute libnss3-tools apt-file pcp libpcp3-dev haveged
 
 apt-get -y upgrade
 
@@ -19,6 +19,8 @@ echo "apt_preserve_sources_list: true" >> /etc/cloud/cloud.cfg
 cd /tmp/deploy
 /bin/bash ./secure-pcp.sh
 
+update-rc.d haveged enable
+
 # Start pmcd only on boot, upstart is a pain
 update-rc.d pmie disable
 update-rc.d pmlogger disable
@@ -27,5 +29,8 @@ update-rc.d pmproxy disable
 # Turn on proc reporting
 sed -i -e '/iam=proc/a args=-A' /var/lib/pcp/pmdas/proc/Install
 touch /var/lib/pcp/pmdas/proc/.NeedInstall
+
+# Configure hotproc
+cp /tmp/deploy/hotproc.conf /var/lib/pcp/pmdas/proc/
 
 cat /etc/cloud/cloud.cfg

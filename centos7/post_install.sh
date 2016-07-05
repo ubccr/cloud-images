@@ -21,7 +21,7 @@ yum clean all
 yum repolist
 
 # Need cloud-utils-growpart otherwise ebs resize just fails silently
-yum install -y cloud-init cloud-utils-growpart
+yum install -y cloud-init cloud-utils-growpart haveged
 
 yum -y update
 
@@ -32,11 +32,16 @@ yum -y update
 cd /tmp/deploy
 /bin/bash ./secure-pcp.sh 
 
+systemctl enable haveged
+
 # Start pcp on boot
 systemctl enable pmcd
 
 # Turn on proc reporting
 sed -i -e '/iam=proc/a args=-A' /var/lib/pcp/pmdas/proc/Install
 touch /var/lib/pcp/pmdas/proc/.NeedInstall
+
+# Configure hotproc
+cp /tmp/deploy/hotproc.conf /var/lib/pcp/pmdas/proc/
 
 cat /etc/cloud/cloud.cfg

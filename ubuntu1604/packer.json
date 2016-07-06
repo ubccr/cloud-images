@@ -11,8 +11,8 @@
     "disk_size": "10000",
     "headless": "true",
     "http_directory" : ".",
-    "http_port_min" : 9001,
-    "http_port_max" : 9001,
+    "http_port_min" : 9005,
+    "http_port_max" : 9005,
     "boot_wait": "5s",
     "boot_command": [
       "<enter><wait>",

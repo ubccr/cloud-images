@@ -1,22 +1,51 @@
 #!/bin/bash
 
-#Not a proper script just a list of commands to run
+image=$1
 
-euca-run-instances -n 1 -g buildbot -k buildbot -t m2.2xlarge emi-6f50f14d
+region="buildbot-ccr@ccr-cbls-1"
 
-euca-create-volume -z ccr-cbls-2a -s 10
+
+emi=`euca-describe-images --region $region|grep centos7 |grep -v ebs |head -n 1 |cut -f 2`
+
+echo "Starting imager instance"
+
+inst=`euca-run-instances --region $region -n 1 -g buildbot -k buildbot -t m2.2xlarge -f userdata.sh $emi | grep INSTANCE | cut -f 2`
+
+echo "Creating volume"
+
+vol=`euca-create-volume --region $region -z ccr-cbls-1a -s 10 |cut -f 2`
+
+ip=`euca-describe-instances --region $region $inst |grep INSTANCE | awk '{print $13}'`
+
+timer=0
+
+while true ; do
+        if [ "$timer" -eq "24" ]; then
+                echo "$inst failed to boot"
+                exit 1
+        fi
+        echo "Waiting for $inst to boot"
+        ping -c 1 $ip && break
+        sleep 10
+        ((timer++))
+done
+
+echo "Attaching volume"
 
 # The -d option is ignored, but required, perfect
-euca-attach-volume vol-6ad25906 -i i-867c4531 -d /dev/sdq
+euca-attach-volume --region $region $vol -i $inst -d /dev/sdq
 
-# Fix remote sudo if neccesarry
+# Give everything a chance to come up
+echo "Instance booted"
+sleep 20
 
+echo "Running dd"
 
 # Note the braindead device file name, looks like exactly what we chose :(
-dd if=output-qemu/ccr-centos7-20160603-1 | ssh -i ~/.ssh/buildbot.key centos@172.17.41.70 sudo dd of=/dev/vdc
+dd if=$image | ssh -o "StrictHostKeyChecking no" -i ~/.ssh/buildbot.key centos@$ip sudo dd of=/dev/vdc
 
-euca-detach-volume vol-6ad25906
+echo "Detaching volume"
 
-euca-create-snapshot vol-6ad25906
+euca-detach-volume --region $region $vol
 
-euca-register --name ebstest2 --snapshot snap-76e6b7c4 -a x86_64
+echo $vol

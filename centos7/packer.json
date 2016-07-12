@@ -1,4 +1,8 @@
 {
+  "variables": {
+    "image_type": "{{env `PACKER_IMAGE_TYPE`}}",
+    "provision_passwd": ""
+  },
   "builders": [
   {
   "name": "centos7",
@@ -8,7 +12,7 @@
   "iso_checksum": "99d305fa40ec9e28ef8450c3bcc45f85",
   "iso_checksum_type": "md5",
   "ssh_username": "root",
-  "ssh_password": "password",
+  "ssh_password": "{{user `provision_passwd`}}",
   "disk_size": "10000",
   "http_directory" : ".",
   "http_port_min" : 9002,
@@ -35,6 +39,7 @@
     },
     {
       "type": "shell",
+      "environment_vars": [ "IMAGE_TYPE={{user `image_type`}}" ],
       "script": "post_install.sh"
     }
   ]

@@ -2,6 +2,9 @@
 
 build=$1
 
+# Use: AWS_DEFAULT_REGION='buildbot-ccr@ccr-cbls-1'
+#  for different region
+
 if [ -z $build ]; then
 	echo "Build required"
 	exit 1;

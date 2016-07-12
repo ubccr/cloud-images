@@ -1,7 +1,7 @@
 #
 # Fedora base image
 #
-auth --useshadow --passalgo=sha512
+auth --useshadow –enablemd5
 # Reboot after installation
 reboot
 # Use network installation
@@ -25,13 +25,13 @@ lang en_US.UTF-8
 network  --bootproto=dhcp --device=eth0
 network  --hostname=localhost.localdomain
 # Root password
-rootpw --plaintext password
+rootpw --iscrypted $1$9NgiwjJx$LT1qg2Kvm6wsiI8S6v8kJ0
 # SELinux configuration
 selinux --disabled
 # System services
 services --enabled="network,ntpd,ntpdate"
 # System timezone
-timezone UTC
+timezone America/New_York
 # System bootloader configuration
 bootloader --append="serial=tty0 console=ttyS0,115200n8" --location=mbr --timeout=1 --boot-drive=vda
 #Setup Partitions

@@ -33,4 +33,16 @@ touch /var/lib/pcp/pmdas/proc/.NeedInstall
 # Configure hotproc
 cp /tmp/deploy/hotproc.conf /var/lib/pcp/pmdas/proc/
 
+sed -i -e 's/.*PasswordAuthentication.*//g' -e 's/.*PermitRootLogin.*//g' /etc/ssh/sshd_config
+sed -i -e 's/.*ssh_pwauth.*//g' -e 's/.*disable_root.*//g' /etc/cloud/cloud.cfg
+
+echo "disable_root: 1" >> /etc/cloud/cloud.cfg
+echo "ssh_pwauth:   0" >> /etc/cloud/cloud.cfg
+
+echo "PasswordAuthentication no" >> /etc/ssh/sshd_config
+echo "PermitRootLogin no" >> /etc/ssh/sshd_config
+
+passwd --delete root
+passwd --lock root
+
 cat /etc/cloud/cloud.cfg

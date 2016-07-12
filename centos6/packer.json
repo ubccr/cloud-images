@@ -1,4 +1,7 @@
 {
+  "variables": {
+    "provision_passwd": ""
+  },
   "builders": [
   {
   "name": "centos6",
@@ -8,7 +11,7 @@
   "iso_checksum": "0ca12fe5f28c2ceed4f4084b41ff8a0b",
   "iso_checksum_type": "md5",
   "ssh_username": "root",
-  "ssh_password": "password",
+  "ssh_password": "{{user `provision_passwd`}}",
   "ssh_wait_timeout": "3000000s",
   "disk_size": "10000",
   "http_directory" : ".",

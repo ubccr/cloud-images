@@ -1,4 +1,7 @@
 {
+  "variables": {
+    "provision_passwd": ""
+  },
   "builders": [{
     "name": "ubuntu1604",
     "type": "qemu",
@@ -38,7 +41,7 @@
     ],
     "ssh_wait_timeout": "60m",
     "ssh_username": "root",
-    "ssh_password": "password",
+    "ssh_password": "{{user `provision_passwd`}}",
     "shutdown_command": "sudo systemctl poweroff",
     "disk_interface": "virtio",
     "qemu_binary": "/usr/libexec/qemu-kvm",

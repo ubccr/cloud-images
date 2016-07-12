@@ -4,8 +4,8 @@
 lang en_US.UTF-8
 keyboard us
 skipx
-timezone UTC
-auth --useshadow --passalgo=sha512
+timezone America/New_York
+auth --useshadow –enablemd5
 selinux --disabled
 firewall --disabled
 bootloader --timeout=1  --append="serial=tty0 console=ttyS0,115200n8"
@@ -15,7 +15,7 @@ services --enabled=network,ntpd,ntpdate,acpid
 part / --size=1 --grow --asprimary --ondrive=vda
 
 zerombr
-rootpw password
+rootpw --iscrypted $1$9NgiwjJx$LT1qg2Kvm6wsiI8S6v8kJ0
 reboot
 
 url --url="http://mirrors.cbls.ccr.buffalo.edu/centos/6/os/x86_64/"

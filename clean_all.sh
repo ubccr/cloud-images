@@ -12,5 +12,6 @@ do
 	/bin/rm -f packer-*.json
 	/bin/rm -rf output-qemu
 	/bin/rm -rf CHANGE_NAME
+	/bin/rm -f *.info
 	cd ..
 done

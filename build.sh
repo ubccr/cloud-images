@@ -16,7 +16,7 @@ function myebs
 
 	# Global $region and $imagename are used
 
-	emi=`euca-describe-images --region $region|grep centos7-ccr |grep -v ebs |head -n 1 |cut -f 2`
+	emi=`euca-describe-images --region $region|grep centos7-ccr |grep -v ebs |grep -v FOREMAN | head -n 1 |cut -f 2`
 
 	[[ ! -z "$emi" ]] || badexit "No usable image"
 	
@@ -61,7 +61,7 @@ function myebs
 	echo "Running dd"
 	
 	# Note the braindead device file name, looks like exactly what we chose :(
-	dd if=$imagename/$imagename | ssh -o "StrictHostKeyChecking no" -i ~/.ssh/buildbot.key centos@$ip sudo dd of=/dev/vdc
+	dd if=$imagename/$imagename | ssh -o "StrictHostKeyChecking no" -o "CheckHostIP no" -i ~/.ssh/buildbot.key centos@$ip sudo dd of=/dev/vdc
 	
 	[[ "$?" -eq "0" ]] || badexit "Failed to DD"
 
@@ -90,9 +90,15 @@ fi
 
 os=${PWD##*/}
 
+extraname=""
+
+if [ ! -z "$EXTRA_NAME" ]; then
+	extraname="$EXTRA_NAME"-
+fi	
+
 builddate=`date +%Y%m%d`
-imagename=$os-ccr-$builddate-$rev
-ebsimagename=$os-ebs-ccr-$builddate-$rev
+imagename=$os-ccr-$extraname$builddate-$rev
+ebsimagename=$os-ebs-ccr-$extraname$builddate-$rev
 fulllog=$imagename.log
 
 zone=ccr-cbls-2a
@@ -106,7 +112,7 @@ touch $fulllog
 echo "Building packer image: $imagename" | tee -a $fulllog
 
 sed -e "s/CHANGE_NAME/$imagename/g" packer.json > packer-$builddate.json
-packer build packer-$builddate.json >> $fulllog || badexit "Can't build: $imagename"
+packer build -var-file=../vars.json packer-$builddate.json >> $fulllog || badexit "Can't build: $imagename"
 
 # Convert for Euca
 echo "Running virt-sysprep" | tee -a $fulllog
@@ -114,8 +120,12 @@ virt-sysprep -a $imagename/$imagename >> $fulllog || badexit "Can't virt-sysprep
 
 # Do the rest for both regions
 
-#regions='buildbot@ccr-cbls-2 buildbot-ccr@ccr-cbls-1'
-regions='buildbot-ccr@ccr-cbls-1'
+regions='buildbot@ccr-cbls-2 buildbot-ccr@ccr-cbls-1'
+#regions='buildbot-ccr@ccr-cbls-1'
+
+if [ ! -z "$BUILD_REGIONS" ]; then
+	regions="$BUILD_REGIONS"
+fi
 
 for region in $regions; do
 
@@ -130,9 +140,11 @@ for region in $regions; do
 	
 	emi=`grep ^IMAGE $fulllog |cut -f 2`
 	
-	# Make public
-	echo "Making $emi public" | tee -a $fulllog
-	euca-modify-image-attribute --region $region -l -a all $emi >> $fulllog || badexit "Can't make $emi public"
+	if [ -z "$PRIVATE" ]; then
+		# Make public
+		echo "Making $emi public" | tee -a $fulllog
+		euca-modify-image-attribute --region $region -l -a all $emi >> $fulllog || badexit "Can't make $emi public"
+	fi
 
 	if [[ $region =~ "ccr-cbls-1" ]]; then
 
@@ -175,18 +187,22 @@ for region in $regions; do
 	
 	ebsemi=`grep ^IMAGE $fulllog | tail -1 | cut -f 2`
 	
-	# Make public
-	echo "Making EBS $ebsemi public" | tee -a $fulllog
-	euca-modify-image-attribute --region $region -l -a all $ebsemi >> $fulllog || badexit "Can't make EBS image public"
+	if [ -z "$PRIVATE" ]; then
+		# Make public
+		echo "Making EBS $ebsemi public" | tee -a $fulllog
+		euca-modify-image-attribute --region $region -l -a all $ebsemi >> $fulllog || badexit "Can't make EBS image public"
+	fi
+
+	
+	touch $region.info
+	echo "emi=$emi" >> $region.info
+	echo "ebsemi=$ebsemi" >> $region.info
+	echo "vol=$volid" >> $region.info
+	echo "snap=$importsnap" >> $region.info
 
 done
 
 # Make a backup
 echo "Copying to /srv/cosmos/euca/images"
 cp -r $imagename /srv/cosmos/euca/images/$os
-touch /srv/cosmos/euca/images/$os/$imagename/info.txt
-# Need to fix this for regions.  Create one file per region above and then copy here
-echo "emi=$emi" >> /srv/cosmos/euca/images/$os/$imagename/info.txt
-echo "ebsemi=$ebsemi" >> /srv/cosmos/euca/images/$os/$imagename/info.txt
-echo "vol=$volid" >> /srv/cosmos/euca/images/$os/$imagename/info.txt
-echo "snap=$importsnap" >> /srv/cosmos/euca/images/$os/$imagename/info.txt
+cp *.info /srv/cosmos/euca/images/$os/$imagename/

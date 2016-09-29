@@ -9,7 +9,7 @@ apt-get update
 
 apt-get -y -t jessie-backports install cloud-init
 
-apt-get -y install cloud-initramfs-growroot traceroute libnss3-tools apt-file pcp libpcp3-dev sudo haveged
+apt-get -y install cloud-initramfs-growroot traceroute libnss3-tools apt-file pcp libpcp3-dev sudo haveged screen tmux
 
 apt-get -y upgrade
 

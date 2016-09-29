@@ -14,7 +14,7 @@ echo "deb http://mirrors.ccr.buffalo.edu/ccr/ubuntu/1604 ./" >> /etc/apt/sources
 
 apt-get update
 
-apt-get -y install pcp libpcp3-dev haveged
+apt-get -y install pcp libpcp3-dev haveged screen tmux
 
 echo "apt_preserve_sources_list: true" >> /etc/cloud/cloud.cfg
 

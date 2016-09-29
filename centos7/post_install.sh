@@ -18,7 +18,7 @@ yum clean all
 yum repolist
 
 # Need cloud-utils-growpart otherwise ebs resize just fails silently
-yum install -y cloud-init cloud-utils-growpart haveged 
+yum install -y cloud-init cloud-utils-growpart haveged screen tmux
 
 if [ "$IMAGE_TYPE" != "local" ]; then
 

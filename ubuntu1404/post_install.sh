@@ -6,7 +6,7 @@ echo "deb http://mirrors.ccr.buffalo.edu/ccr/ubuntu/1404 /" >> /etc/apt/sources.
 
 apt-get update
 
-apt-get -y install cloud-init traceroute libnss3-tools apt-file pcp libpcp3-dev haveged
+apt-get -y install cloud-init traceroute libnss3-tools apt-file pcp libpcp3-dev haveged screen tmux
 
 apt-get -y upgrade
 

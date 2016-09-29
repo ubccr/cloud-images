@@ -9,6 +9,7 @@ do
 	/bin/rm -rf $os-ccr*
 	/bin/rm -rf ccr-$os-*
 	/bin/rm -f $os.build.out
+	/bin/rm -f $os.FOREMAN.build.out
 	/bin/rm -f packer-*.json
 	/bin/rm -rf output-qemu
 	/bin/rm -rf CHANGE_NAME

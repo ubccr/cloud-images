@@ -7,8 +7,7 @@ if [ -z $rev ]; then
 	exit 1;
 fi
 
-#for os in centos6 centos7 ubuntu1404 ubuntu1604 debian8
-for os in centos6 ubuntu1404 ubuntu1604 debian8
+for os in centos6 centos7 ubuntu1404 ubuntu1604 debian8
 do
 	echo "Building $os"
 	cd $os
@@ -23,3 +22,7 @@ echo "Building Foreman Image"
 cd centos7
 echo "EXTRA_NAME=FOREMAN BUILD_REGIONS='buildbot-ccr@ccr-cbls-1' PACKER_IMAGE_TYPE=local ../build.sh $rev &> centos7.FOREMAN.build.out"
 EXTRA_NAME=FOREMAN BUILD_REGIONS='buildbot-ccr@ccr-cbls-1' PACKER_IMAGE_TYPE=local ../build.sh $rev &> centos7.FOREMAN.build.out
+
+echo "Building Foreman Dev Image"
+echo "EXTRA_NAME=FOREMAN-dev BUILD_REGIONS='buildbot-dev@ccr-cbls-dev' PACKER_IMAGE_TYPE=local ../build.sh $rev &> centos7.FOREMAN-dev.build.out"
+EXTRA_NAME=FOREMAN-dev BUILD_REGIONS='buildbot-dev@ccr-cbls-dev' PACKER_IMAGE_TYPE=local ../build.sh $rev &> centos7.FOREMAN-dev.build.out

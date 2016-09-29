@@ -13,6 +13,18 @@ function badexit
 
 function myebs
 {
+	
+	# Need to update the zone mapping below if you add a region
+	zone="NEED_TO_SET_ZONE"
+
+	#buildbot@ccr-cbls-2 buildbot-ccr@ccr-cbls-1 buildbot-dev@ccr-cbls-dev
+	if [ "$region" == "buildbot@ccr-cbls-2" ]; then
+		zone="ccr-cbls-2a"
+	elif [ "$region" == "buildbot-ccr@ccr-cbls-1" ]; then
+		zone="ccr-cbls-1a"
+	elif [ "$region" == "buildbot-dev@ccr-cbls-dev" ]; then
+		zone="ccr-cbls-dev"
+	fi
 
 	# Global $region and $imagename are used
 
@@ -23,12 +35,12 @@ function myebs
 	echo "Starting imager instance"
 	
 	# Need to check for error here
-	inst=`euca-run-instances --region $region -n 1 -g buildbot -k buildbot -t m2.2xlarge -f ../userdata.sh $emi | grep INSTANCE | cut -f 2`
+	inst=`euca-run-instances --region $region -z $zone -n 1 -g buildbot -k buildbot -t m2.2xlarge -f ../userdata.sh $emi | grep INSTANCE | cut -f 2`
 	
 	echo "Creating volume"
 	
 	# Need to check for error here
-	vol=`euca-create-volume --region $region -z ccr-cbls-1a -s 10 | cut -f 2`
+	vol=`euca-create-volume --region $region -z $zone -s 10 | cut -f 2`
 	
 	ip=`euca-describe-instances --region $region $inst |grep INSTANCE | awk '{print $13}'`
 	
@@ -120,7 +132,7 @@ virt-sysprep -a $imagename/$imagename >> $fulllog || badexit "Can't virt-sysprep
 
 # Do the rest for both regions
 
-regions='buildbot@ccr-cbls-2 buildbot-ccr@ccr-cbls-1'
+regions='buildbot@ccr-cbls-2 buildbot-ccr@ccr-cbls-1 buildbot-dev@ccr-cbls-dev'
 #regions='buildbot-ccr@ccr-cbls-1'
 
 if [ ! -z "$BUILD_REGIONS" ]; then
@@ -146,7 +158,7 @@ for region in $regions; do
 		euca-modify-image-attribute --region $region -l -a all $emi >> $fulllog || badexit "Can't make $emi public"
 	fi
 
-	if [[ $region =~ "ccr-cbls-1" ]]; then
+	if [[ $region =~ "ccr-cbls-1" || $region =~ "ccr-cbls-dev" ]]; then
 
 		echo "Running our own EBS import for $ebsimagename"
 

@@ -18,7 +18,7 @@ yum clean all
 yum repolist
 
 # Need cloud-utils-growpart otherwise ebs resize just fails silently
-yum install -y cloud-init cloud-utils-growpart dracut-modules-growroot haveged
+yum install -y cloud-init cloud-utils-growpart dracut-modules-growroot haveged screen tmux
 
 # growpart doesn't work in centos6 so use growroot and rebuild initrd
 dracut -f

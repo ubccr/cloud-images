@@ -158,29 +158,11 @@ for region in $regions; do
 		euca-modify-image-attribute --region $region -l -a all $emi >> $fulllog || badexit "Can't make $emi public"
 	fi
 
-	if [[ $region =~ "ccr-cbls-1" || $region =~ "ccr-cbls-dev" ]]; then
 
-		echo "Running our own EBS import for $ebsimagename"
+	echo "Running our own EBS import for $ebsimagename"
 
-		myebs
+	myebs
 		
-	else
-	
-		# Submit a task to create an EBS volume
-		echo "Making EBS task for $ebsimagename" | tee -a $fulllog
-		euca-import-volume $imagename/$imagename --region $region --format raw  --bucket $ebsimagename --prefix $ebsimagename -z $zone >> $fulllog || badexit "Can't start EBS task"
-		
-		importvol=`grep IMPORTVOLUME $fulllog | cut -f 4`
-		
-		while true ; do
-			echo "Waiting for EBS task to finish..." | tee -a $fulllog
-			euca-describe-conversion-tasks --region $region $importvol |grep completed && break
-			sleep 10
-		done
-		
-		volid=`euca-describe-conversion-tasks --region $region $importvol |grep VolumeId |cut -f 7`
-	fi
-	
 	# Create the snapshot from the volume
 	echo "Make snapshot for $volid" | tee -a $fulllog
 	euca-create-snapshot --region $region $volid >> $fulllog || badexit "Can't make snapshot for $volid"

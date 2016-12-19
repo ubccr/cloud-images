@@ -29,7 +29,7 @@ rootpw --iscrypted $1$9NgiwjJx$LT1qg2Kvm6wsiI8S6v8kJ0
 # SELinux configuration
 selinux --disabled
 # System services
-services --enabled="network,ntpd,ntpdate"
+services --enabled="network,chrony"
 # System timezone
 timezone America/New_York
 # System bootloader configuration
@@ -70,8 +70,7 @@ chkconfig
 coreutils
 curl
 e2fsprogs
-ntp
-ntpdate
+chrony
 openssh-server
 passwd
 policycoreutils

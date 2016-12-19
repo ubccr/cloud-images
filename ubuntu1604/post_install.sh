@@ -4,7 +4,7 @@ apt-get update
 
 apt-get -y install cloud-init traceroute apt-file libnss3-tools
 
-apt-get -y upgrade
+apt-get -y dist-upgrade
 
 apt-file update
 

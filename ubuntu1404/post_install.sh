@@ -8,7 +8,7 @@ apt-get update
 
 apt-get -y install cloud-init traceroute libnss3-tools apt-file pcp libpcp3-dev haveged screen tmux
 
-apt-get -y upgrade
+apt-get -y dist-upgrade
 
 apt-file update
 

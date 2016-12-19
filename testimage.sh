@@ -79,6 +79,7 @@ done
 
 if [ "$pcpfail" -eq "0" ]; then
 	echo "Image $image is GOOD"
+	ssh -i ~/.ssh/buildbot.key -o "StrictHostKeyChecking no" $user@$ip uname -a
 	euca-terminate-instances $inst
 	exit 0
 else

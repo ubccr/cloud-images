@@ -13,12 +13,14 @@ yum repolist
 yum install -y epel-release
 
 /bin/cp -f /tmp/deploy/epel.repo /etc/yum.repos.d/
+/bin/cp -f /tmp/deploy/gf.repo /etc/yum.repos.d/
+rpm --import http://mirror.symnds.com/distributions/gf/RPM-GPG-KEY-gf.el7
 
 yum clean all
 yum repolist
 
 # Need cloud-utils-growpart otherwise ebs resize just fails silently
-yum install -y cloud-init cloud-utils-growpart haveged screen tmux
+yum install -y cloud-init cloud-utils-growpart haveged screen tmux perl-Digest-SHA zip unzip bzip2 deltarpm
 
 if [ "$IMAGE_TYPE" != "local" ]; then
 

@@ -7,7 +7,7 @@ if [ -z $rev ]; then
 	exit 1;
 fi
 
-for os in centos6 centos7 ubuntu1404 ubuntu1604 debian8
+for os in centos6 centos7 ubuntu1404 ubuntu1604 debian8 coreos
 do
 	echo "Building $os"
 	cd $os

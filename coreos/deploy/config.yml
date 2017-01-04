@@ -1,0 +1,4 @@
+#cloud-config
+users:
+  - name: core
+    passwd: $1$9NgiwjJx$LT1qg2Kvm6wsiI8S6v8kJ0

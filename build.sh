@@ -127,8 +127,12 @@ sed -e "s/CHANGE_NAME/$imagename/g" packer.json > packer-$builddate.json
 packer build -var-file=../vars.json packer-$builddate.json >> $fulllog || badexit "Can't build: $imagename"
 
 # Convert for Euca
-echo "Running virt-sysprep" | tee -a $fulllog
-virt-sysprep -a $imagename/$imagename >> $fulllog || badexit "Can't virt-sysprep $imagename"
+if [[ "$imagename" =~ "coreos" ]]; then
+	echo "Skipping virt-sysprep for coreos" | tee -a $fulllog
+else
+	echo "Running virt-sysprep" | tee -a $fulllog
+	virt-sysprep -a $imagename/$imagename >> $fulllog || badexit "Can't virt-sysprep $imagename"
+fi
 
 # Do the rest for both regions
 

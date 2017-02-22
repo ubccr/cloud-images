@@ -59,12 +59,15 @@ function myebs
 	
 	echo "Attaching volume"
 	
-	sleep 10
+	# So even after the instance is booted, you can get:
+	# euca-attach-volume: error (IncorrectState): Instance 'i-c9b9581d' is not 'running'
+	# Need to wait for quite a while
+	sleep 30
 
 	# The -d option is ignored, but required, perfect
 	euca-attach-volume --region $region $vol -i $inst -d /dev/sdq
 	
-	[[ "$?" -eq "0" ]] || badexit "Failed to attach volume"
+	[[ "$?" -eq "0" ]] || badexit "Failed to attach volume $vol"
 
 	# Give everything a chance to come up
 	echo "Instance booted"
@@ -136,8 +139,8 @@ fi
 
 # Do the rest for both regions
 
-regions='buildbot@ccr-cbls-2 buildbot-ccr@ccr-cbls-1 buildbot-dev@ccr-cbls-dev'
-#regions='buildbot-ccr@ccr-cbls-1'
+#regions='buildbot@ccr-cbls-2 buildbot-ccr@ccr-cbls-1 buildbot-dev@ccr-cbls-dev'
+regions='buildbot@ccr-cbls-2'
 
 if [ ! -z "$BUILD_REGIONS" ]; then
 	regions="$BUILD_REGIONS"

@@ -18,6 +18,10 @@ apt-get -y install pcp libpcp3-dev haveged screen tmux
 
 echo "apt_preserve_sources_list: true" >> /etc/cloud/cloud.cfg
 
+# Disable apt-daily since it interferes with cloudinit
+systemctl disable apt-daily.service
+systemctl disable apt-daily.timer
+
 # Setup secure pcp
 cd /tmp/deploy
 /bin/bash ./secure-pcp.sh

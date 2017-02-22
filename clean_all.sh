@@ -17,3 +17,5 @@ do
 	/bin/rm -f *.info
 	cd ..
 done
+
+/bin/rm -rf coreos/packer_cache/

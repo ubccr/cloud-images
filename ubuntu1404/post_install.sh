@@ -1,12 +1,12 @@
 #!/bin/bash
 
+# Add our local repo
 wget -O - http://mirrors.ccr.buffalo.edu/ccr/RPM-GPG-KEY-ccrpkg | apt-key add -
-
 echo "deb http://mirrors.ccr.buffalo.edu/ccr/ubuntu/1404 /" >> /etc/apt/sources.list
 
 apt-get update
 
-apt-get -y install cloud-init traceroute libnss3-tools apt-file pcp libpcp3-dev haveged screen tmux
+apt-get -y install cloud-init traceroute libnss3-tools apt-file pcp libpcp3-dev haveged screen tmux nmap
 
 apt-get -y dist-upgrade
 

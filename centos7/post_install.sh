@@ -54,6 +54,8 @@ sed -i -e 's/.*ssh_pwauth.*//g' -e 's/.*disable_root.*//g' /etc/cloud/cloud.cfg
 echo "disable_root: 1" >> /etc/cloud/cloud.cfg
 echo "ssh_pwauth:   0" >> /etc/cloud/cloud.cfg
 
+echo "output: {all: '| tee -a /var/log/cloud-init-output.log'}" >> /etc/cloud/cloud.cfg.d/05_logging.cfg
+
 echo "PasswordAuthentication no" >> /etc/ssh/sshd_config
 echo "PermitRootLogin no" >> /etc/ssh/sshd_config
 

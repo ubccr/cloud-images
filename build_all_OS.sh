@@ -7,24 +7,13 @@ if [ -z $rev ]; then
 	exit 1;
 fi
 
-# Possible Regions:
-# 'buildbot@ccr-cbls-2 buildbot-ccr@ccr-cbls-1 buildbot-dev@ccr-cbls-dev'
-
-#BUILD_REGIONS='buildbot-dev@ccr-cbls-dev buildbot@ccr-cbls-2'
-BUILD_REGIONS='buildbot@ccr-cbls-2'
-#BUILD_REGIONS='buildbot-dev@ccr-cbls-dev'
-export BUILD_REGIONS
-
-#for os in centos6 centos7 ubuntu1404 ubuntu1604 debian8 coreos
-#for os in centos6 ubuntu1404 ubuntu1604 coreos
-#for os in centos6 centos7 ubuntu1404 ubuntu1604 coreos
-#for os in centos7
-for os in debian8
+for os in centos6 centos7 ubuntu1404 ubuntu1604
+#for os in ubuntu1604
 do
 	echo "Building $os"
 	cd $os
-	echo "../build.sh $rev &> $os.build.out &"
-	../build.sh $rev &> $os.build.out &
+	echo "../build_OS.sh $rev &> $os.build.out &"
+	../build_OS.sh $rev &> $os.build.out &
 	cd ..
 done
 

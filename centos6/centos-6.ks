@@ -54,7 +54,7 @@ traceroute
 bind-utils
 telnet
 wget
-
+nmap
 # Package exclusions
 -plymouth
 -plymouth-system-theme

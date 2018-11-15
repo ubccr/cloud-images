@@ -15,6 +15,11 @@ if [[ "$AWS_DEFAULT_REGION" =~ "ccr-cbls-1" ]]; then
 	export url="128.205.11.242"
 fi
 
+if [[ "$AWS_DEFAULT_REGION" =~ "ccr-cbls-dev" ]]; then
+        export S3CURLCREDS="ccrcblsdev"
+        export url="128.205.41.252"
+fi
+
 emi=`euca-describe-images |grep $image |cut -f 2`
 
 echo "Removing $emi"

@@ -35,6 +35,8 @@ timezone America/New_York
 # System bootloader configuration
 bootloader --append="serial=tty0 console=ttyS0,115200n8" --location=mbr --timeout=1 --boot-drive=vda
 #Setup Partitions
+# Need to use ftpye=1 for xfs overlay but latest anaconda barfs on this
+#part / --mkfsoptions=-n ftype=1 --size=1 --grow --asprimary --ondrive=vda
 part / --size=1 --grow --asprimary --ondrive=vda
 # Clear the Master Boot Record
 zerombr
@@ -90,6 +92,7 @@ traceroute
 bind-utils
 telnet
 wget
+nmap
 -acl
 -aic94xx-firmware
 -atmel-firmware

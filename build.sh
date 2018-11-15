@@ -11,6 +11,23 @@ function badexit
     exit 1
 }
 
+function retry {
+  local n=1
+  local max=9
+  local delay=30
+  while true; do
+    "$@" && break || {
+      if [[ $n -lt $max ]]; then
+        ((n++))
+        echo "Command failed. Attempt $n/$max:"
+        sleep $delay;
+      else
+        badexit "The command has failed after $n attempts."
+      fi
+    }
+  done
+}
+
 function myebs
 {
 	
@@ -42,6 +59,9 @@ function myebs
 	# Need to check for error here
 	vol=`euca-create-volume --region $region -z $zone -s 10 | cut -f 2`
 	
+	# Name the volume so we can find orphaned ones later
+	retry euca-create-tags --region $region $vol --tag Name="$imagename"
+
 	ip=`euca-describe-instances --region $region $inst |grep INSTANCE | awk '{print $13}'`
 	
 	timer=0
@@ -62,19 +82,24 @@ function myebs
 	# So even after the instance is booted, you can get:
 	# euca-attach-volume: error (IncorrectState): Instance 'i-c9b9581d' is not 'running'
 	# Need to wait for quite a while
-	sleep 30
+	#sleep 30
 
 	# The -d option is ignored, but required, perfect
-	euca-attach-volume --region $region $vol -i $inst -d /dev/sdq
+	retry euca-attach-volume --region $region $vol -i $inst -d /dev/sdq
 	
 	[[ "$?" -eq "0" ]] || badexit "Failed to attach volume $vol"
 
 	# Give everything a chance to come up
+	# sleep 30
+	retry ssh -o "StrictHostKeyChecking no" -o "CheckHostIP no" -i ~/.ssh/buildbot.key centos@$ip hostname
 	echo "Instance booted"
-	sleep 20
+
+	echo "Looking for volumes"
+	ssh -o "StrictHostKeyChecking no" -o "CheckHostIP no" -i ~/.ssh/buildbot.key centos@$ip lsblk
+
+	sleep 60
 	
 	echo "Running dd"
-	
 	# Note the braindead device file name, looks like exactly what we chose :(
 	dd if=$imagename/$imagename | ssh -o "StrictHostKeyChecking no" -o "CheckHostIP no" -i ~/.ssh/buildbot.key centos@$ip sudo dd of=/dev/vdc
 	
@@ -102,6 +127,7 @@ if [ -z $rev ]; then
 	echo "Rev required"
 	exit 1
 fi
+
 
 os=${PWD##*/}
 
@@ -137,13 +163,17 @@ else
 	virt-sysprep -a $imagename/$imagename >> $fulllog || badexit "Can't virt-sysprep $imagename"
 fi
 
-# Do the rest for both regions
-
 #regions='buildbot@ccr-cbls-2 buildbot-ccr@ccr-cbls-1 buildbot-dev@ccr-cbls-dev'
-regions='buildbot@ccr-cbls-2'
+#regions='buildbot@ccr-cbls-2'
+#regions='buildbot-dev@ccr-cbls-dev'
 
 if [ ! -z "$BUILD_REGIONS" ]; then
 	regions="$BUILD_REGIONS"
+fi
+
+if [ -z "$regions" ]; then
+	echo "Regions required"
+	exit 1
 fi
 
 for region in $regions; do
@@ -182,6 +212,8 @@ for region in $regions; do
 		sleep 10
 	done
 	
+	# Name the snapshot so we can find orphaned ones later
+	euca-create-tags --region $region $importsnap --tag Name="$imagename"
 	
 	# Register the EBS image
 	euca-register --region $region --name $ebsimagename --description "$os-ebs" --snapshot $importsnap -a x86_64 >> $fulllog || badexit "Can't register EBS: $ebsimagename from $importsnap"

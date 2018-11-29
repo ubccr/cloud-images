@@ -2,7 +2,7 @@
 
 /bin/rm -f *-test.out
 
-for os in centos6 centos7 ubuntu1404 ubuntu1604 debian8 coreos
+for os in centos6 centos7 ubuntu1404 ubuntu1604 ubuntu1804 debian8 coreos
 do
 	echo "Cleaning $os"
 	cd $os

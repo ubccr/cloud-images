@@ -18,9 +18,9 @@ zerombr
 rootpw --iscrypted $1$9NgiwjJx$LT1qg2Kvm6wsiI8S6v8kJ0
 reboot
 
-url --url="http://mirrors.cbls.ccr.buffalo.edu/centos/6/os/x86_64/"
-repo --name="CentOS-Base" --baseurl=http://mirrors.cbls.ccr.buffalo.edu/centos/6/os/x86_64/
-repo --name="CCR" --baseurl=http://mirrors.cbls.ccr.buffalo.edu/ccr/centos/6/x86_64/
+url --url="http://mirrors.cbls.ccr.buffalo.edu/centos/latest/6/os/x86_64/"
+repo --name="CentOS-Base" --baseurl=http://mirrors.cbls.ccr.buffalo.edu/centos/latest/6/os/x86_64/
+repo --name="CCR" --baseurl=http://mirrors.cbls.ccr.buffalo.edu/ccr/centos/latest/6/x86_64/
 
 %packages --nobase --excludedocs --instLangs=en
 @core

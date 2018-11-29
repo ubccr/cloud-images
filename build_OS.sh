@@ -57,6 +57,7 @@ touch $fulllog
 echo "Building packer image: $imagename" | tee -a $fulllog
 
 sed -e "s/CHANGE_NAME/$imagename/g" packer.json > packer-$builddate.json
+#PACKER_LOG=1 packer build -var-file=../vars.json packer-$builddate.json >> $fulllog || badexit "Can't build: $imagename"
 packer build -var-file=../vars.json packer-$builddate.json >> $fulllog || badexit "Can't build: $imagename"
 
 # Clean up for the cloud
